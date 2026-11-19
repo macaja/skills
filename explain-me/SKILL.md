@@ -7,7 +7,7 @@ description: Explains a concept, a system, a piece of code, a document or a prev
 
 As models do more of the work, more of our time goes to understanding what they produce. This skill makes that easier with a ladder of output formats, from plain to rich. Each rung is easier to take in than the one before it, and also costs more to make.
 
-`assets/reference.svg` is a one-page visual summary of this skill: the ladder, the rules to keep and relax, the limits, the verb forms, common words and two before-and-after examples. `references/ste-rules.md` has the full, strict ASD-STE100 sheet as text.
+`assets/reference.svg` is a one-page visual summary of this skill. It shows the ladder, the rules to keep and relax, the limits, the verb forms, common words and two before-and-after examples. `references/ste-rules.md` has the full, strict ASD-STE100 sheet as text.
 
 ## The ladder
 
@@ -22,7 +22,7 @@ The order is always the same:
 |---|---|---|
 | 1. Text | Default. Any explanation. | About 80% of ASD-STE100, see below. |
 | 2. Diagram | The subject has parts that connect: a flow, a sequence, a hierarchy, a request going through layers, a before and after. | In a terminal, draw it with box-drawing characters inside a code block. Do not use Mermaid in chat, because the terminal does not render it. |
-| 3. Interactive web page | The user asks for "HTML" or a "page", the subject is better understood by interacting with it (step through a process, toggle a setting, move a slider), or it does not fit on one screen. | Publish it on claude.ai with the Artifact tool, and follow that tool's own instructions. If the Artifact tool is not available, write one self-contained `.html` file and open it. |
+| 3. Interactive web page | The user asks for "HTML" or a "page". Or the subject is easier to understand when you interact with it: step through a process, toggle a setting, move a slider. Or it does not fit on one screen. | Publish it on claude.ai with the Artifact tool, and follow that tool's own instructions. If the Artifact tool is not available, write one self-contained `.html` file and open it. |
 | 4. Video | Only when the user asks for a video. | See "Explainer videos" below. |
 
 Start at the rung the user asks for. When they do not name one, start with text, and add a small diagram when the subject has structure. Finish with one line that offers the next rung up, for example "Do you want this as an interactive page on claude.ai?". Do not climb on your own past the diagram, because the page and the video take time the user did not ask for.
@@ -41,7 +41,7 @@ ASD-STE100 is a controlled language for aircraft maintenance manuals. It has wri
 - Use the active voice. Use the imperative for steps ("Run the migration.").
 - Use simple tenses: present, past, future. Avoid the progressive ("is running") and the perfect ("has run") when a simple tense says the same thing.
 - Use one word for one thing. When you call it "the session token" once, do not call it "the auth token" later.
-- Prefer the common word to the formal one: "start", not "commence"; "use", not "utilize"; "make sure", not "ensure"; "before", not "prior to"; "about", not "approximately"; "to", not "in order to".
+- Prefer the common word to the formal one. For example: "start", not "commence"; "use", not "utilize"; "make sure", not "ensure"; "before", not "prior to"; "about", not "approximately"; "to", not "in order to".
 - Keep noun clusters to 3 words or fewer. Break up "user session token refresh handler" into "the handler that refreshes the session token of the user".
 - Do not drop "the", "a" or "this". Short is good, telegraphic is not.
 - Use a vertical list when there is a sequence or more than three items.
@@ -69,7 +69,7 @@ The same idea for code:
 
 ## Other languages
 
-STE is an English standard, and its dictionary only covers English. When the user writes in another language, answer in that language and apply the structure rules: short sentences, active voice, one idea per sentence, one word for one thing, and the common word over the formal one. In Spanish, for example: "usar", not "utilizar"; "antes de", not "con anterioridad a"; "empezar", not "dar comienzo a"; "asegurate de", not "es imperativo garantizar".
+STE is an English standard, and its dictionary only covers English. When the user writes in another language, answer in that language. Apply the structure rules: short sentences, active voice, one idea per sentence, one word for one thing, and the common word over the formal one. In Spanish, for example: "usar", not "utilizar"; "antes de", not "con anterioridad a". Also "empezar", not "dar comienzo a"; and "asegurate de", not "es imperativo garantizar".
 
 ## Explainer videos
 

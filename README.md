@@ -5,6 +5,7 @@ Personal skills for Claude Code.
 | Skill | What it does |
 |---|---|
 | [explain-me](explain-me/SKILL.md) | Explains things with a ladder of formats: text close to ASD-STE100, then a diagram, then an interactive page on claude.ai, and last a video. |
+| [plain-writing](plain-writing/SKILL.md) | Writes or rewrites any text in plain language with the same rules. It keeps every fact, adds none, and draws a small diagram only when words are not enough. |
 
 ## Install
 
