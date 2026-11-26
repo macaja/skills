@@ -1,0 +1,170 @@
+---
+name: design-docs
+description:
+  'Records a technical design as contracts and constraints: inline code sketches, constraint bullets
+  and a diagram, in a work item for small work, a design doc for big work, and a decision record for
+  a choice that outlives both. Holds the templates. Load it before you write or review a design, a
+  decision record or the design part of a work item, at the end of a design session, and when work
+  with a design doc is built.'
+---
+
+# Design docs
+
+Record a design for two readers. The owner is the person you work for, who approves the design. The
+owner skims it in two minutes and says yes or no. The builder is the agent or person who implements
+it, and starts from it without asking. Settle what is costly to change later, and leave the builder
+the rest.
+
+Hand back where the design went, each decision record you wrote, and what the tests in
+[Check it](#check-it) found and what you fixed. For a design doc or a decision record, add the docs
+check output and what the cold read found.
+
+## Key rules
+
+- [Choose where the design goes](#choose-where-the-design-goes): a work item always, a design doc
+  for a shared contract, a decision record for a lasting choice.
+- [Show contracts as code](#show-contracts-as-code): inline code sketches, the call first, then the
+  types, with rules in comments.
+- [State constraints as bullets](#state-constraints-as-bullets): one rule per line, each one a test
+  could check.
+- [Leave the details to the builder](#leave-the-details-to-the-builder): settle the contracts, and
+  list what the builder decides.
+- [Write only the design](#write-only-the-design): present tense, with no dates, names or losing
+  options.
+- [Keep it short](#keep-it-short): one design doc per set of work items that share contracts, one
+  diagram, under about 10 open questions.
+- [Write a decision record](#write-a-decision-record): when a newcomer would undo the choice,
+  reversing it is costly, and the rejected option was real.
+- [Check it](#check-it): the skim test and the builder test, by fresh subagents.
+
+## References
+
+- [Design doc template](./references/design-doc.md): writing a design doc, splitting a long one, or
+  closing one out once its work is built.
+- [Work item template](./references/work-item.md): writing the design part of a work item, or its
+  Acceptance lines.
+- [Decision record template](./references/decision-record.md): writing, changing or removing a
+  decision record.
+- [Test prompts](./references/test-prompts.md): running the skim test and the builder test.
+
+## Choose where the design goes
+
+Give each change that ships on its own a work item in the tracker. Add the others when their
+condition holds:
+
+| Write a         | When                                                                                       | In                              |
+| --------------- | ------------------------------------------------------------------------------------------ | ------------------------------- |
+| work item       | always; it holds the whole design when no design doc exists                                | the work tracker                |
+| design doc      | two or more work items build on a shared contract that is not built yet                    | `docs/design/<work>.md`         |
+| decision record | the owner's choice passes the tests in [Write a decision record](#write-a-decision-record) | `docs/decisions/NNNN-<slug>.md` |
+
+Count as a shared contract any type, API, schema, event, file format or config key that code in more
+than one module reads or writes. A config key that one module reads is not one.
+
+When a design doc exists, link its sections from the work item, and repeat none of their text.
+
+## Show contracts as code
+
+Write each contract as a code sketch: an inline code block that shows its shape. Sketch only what
+crosses a module boundary, and leave out a parameter, a generic or an option that no caller uses
+yet. The builder would keep it, with no caller to test it. Keep each sketch in the design, where
+both readers see the contract next to its use. The builder follows a sketch's shapes and the rules
+in its comments, and may rename anything the module does not export.
+
+- Show the call first, with a realistic result in a comment. Then show the types it needs. Start a
+  contract with no call, such as a config key or a table, at its shape.
+- Put a rule that belongs to one field in a comment on that field.
+- Mark existing code you extend with `// …existing fields`, and show only what changes.
+- Name the module that owns each type in a comment. Leave file paths out: the builder has grep.
+- Show each outside system the design reaches, such as a store or a queue, as an interface, with its
+  adapters named in a comment.
+- Write each sketch in the format the code base uses: its language, its config format, its SQL
+  dialect.
+
+## State constraints as bullets
+
+Write each constraint as one line that a test or a reviewer could check: an invariant, an order, a
+limit, a failure and what happens on it, or something that must never happen.
+
+- Write "when X, Y" for a conditional rule.
+- Give the number for a limit: "100 images or 24 MiB per session".
+- Add a reason in a short clause only when the rule looks arbitrary without it.
+- State each rule once. When a sketch comment holds it, leave it out of the bullets.
+
+## Leave the details to the builder
+
+Settle the contracts, the boundaries between parts, the invariants and the failure behaviour. List
+the choices you leave to the builder under "Builder decides", such as internal names, file layout,
+helper functions, error wording and test layout.
+
+Put a question under "Open questions" only when the owner, a spike or a measurement must settle it.
+Name which one, and what the code does until then. In the design's own text, write "the owner",
+never "you": an agent reads "you" as itself.
+
+When the design extends existing code, describe only the change. The sketches name the code it
+touches, so the doc needs no list of them.
+
+## Write only the design
+
+Write in the present tense, about the system that the design builds.
+
+- State each decision as the rule it set. Leave out who decided, when, the options shown in the
+  session, the losing sketches and the review logs.
+- Write each rule for the builder, such as "the default is 30 days". When you write to the owner
+  instead, such as "a default you can change", the builder gets no rule.
+- Put a rejected option in its decision record. When the choice has no record, put the option in the
+  PR description.
+- Rewrite a design when it changes. Never stack an amendment on top, such as "Changed on 12 Nov:
+  where the text below differs, this list holds".
+
+## Keep it short
+
+- Write one design doc per set of work items that build on the same shared contracts. When a doc
+  passes about 400 lines with its code, split it into one doc per part, as the
+  [design doc template](./references/design-doc.md#split-a-long-design) says.
+- Give a design doc one mermaid diagram of the main path, with 10 nodes or fewer, under its summary.
+  A work item needs none.
+- Keep open questions under about 10. More means the design isn't ready to build.
+
+## Write a decision record
+
+Write a record for a choice that passes all three tests. The record lets the next person who
+proposes a rejected option read why it lost. When the owner asks for a record of a choice that fails
+a test, do what the [decision record template](./references/decision-record.md) says.
+
+- **A capable newcomer would undo it.** With the code open, the choice looks odd or arbitrary. When
+  every change must pass one line, and a comment there can give the reason, write the comment. A
+  security boundary always passes this test.
+- **It is costly to reverse.** Reversing it takes a data migration, a change to a stored or wire
+  format, a move of a security boundary, a break of an external contract, or weeks of rework.
+- **The rejected option was real.** A reasonable engineer would pick it on another day. When each
+  rejected option is a strawman, write no record.
+
+Put a choice that fails a test where its reader looks:
+
+| The choice                       | Goes in                                                          |
+| -------------------------------- | ---------------------------------------------------------------- |
+| a contract, a shape or a rule    | the design doc, then the architecture doc once the work is built |
+| the reason for one piece of code | a code comment                                                   |
+| build order                      | the work items                                                   |
+
+Write, change or remove a record as the [decision record template](./references/decision-record.md)
+says.
+
+## Check it
+
+Run the skim test and the builder test, each with a fresh subagent and its prompt from
+[Test prompts](./references/test-prompts.md). Fix what it finds, run it once more, fix that, and
+stop. For a work item, run only the builder test.
+
+- **Skim test:** when the answer misses the point, rewrite the opening or the diagram. Fix each
+  push-back, or answer it in the PR.
+- **Builder test:** fix each question about a contract or a constraint. A question about a choice
+  under "Builder decides" needs no fix.
+
+For a design doc or a decision record, run the docs checks and a cold read too, as the
+[docs-writing](../docs-writing/SKILL.md) skill says.
+
+**Reply:** where the design went, each decision record you wrote, what the tests found and what you
+fixed, and for a design doc or a decision record, the docs check output and what the cold read
+found.
